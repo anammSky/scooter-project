@@ -1,0 +1,71 @@
+sequenceDiagram
+    actor User
+    participant ScooterApp
+    participant Scooter
+    participant Database
+    
+    User ->> ScooterApp: Create Account
+    activate ScooterApp
+    alt has account
+        ScooterApp -->> User: Already registered response
+    else under 18
+        ScooterApp -->> User: Too young response
+    else 
+        ScooterApp -->> User: Register User
+    end
+    deactivate ScooterApp
+
+    User ->> ScooterApp: Log In
+    activate ScooterApp
+    alt is registered
+        ScooterApp -->> User: No user response
+    else incorrent credentials
+        ScooterApp -->> User: Incorrect credentials response
+    else 
+        ScooterApp -->> User: Log in user
+    end
+    deactivate ScooterApp
+
+    User ->> ScooterApp: Rent Scooter
+    activate ScooterApp
+    alt find scooter
+        activate Scooter
+        ScooterApp ->> Database: find scooter
+            activate Database
+            Database -->> Scooter: generate scooter
+            deactivate Database
+        ScooterApp ->> Scooter: update location
+        alt no location
+            Scooter -->> Scooter: error
+            ScooterApp ->> Scooter: update user
+            Scooter -->> Scooter: check charge    
+            Scooter -->> ScooterApp: return low charge
+            Scooter -->> Scooter: broken
+            Scooter -->> ScooterApp: return broken status
+        end
+        deactivate Scooter
+    end
+    ScooterApp -->> User: rent scooter
+    deactivate ScooterApp
+
+    User ->> ScooterApp: Return Scooter
+    activate ScooterApp
+    alt remove scooter
+            ScooterApp ->> Database: find scooter
+            activate Database
+            Database -->> Scooter: generate scooter
+            deactivate Database
+        activate Scooter
+        ScooterApp ->> Scooter: update location
+        alt no location
+            Scooter -->> Scooter: error
+            ScooterApp ->> Scooter: update user
+            Scooter -->> Scooter: check charge    
+            Scooter -->> ScooterApp: return low charge
+            Scooter -->> Scooter: broken
+            Scooter -->> ScooterApp: return broken status
+        end
+        deactivate Scooter
+    end
+    ScooterApp -->> User: rent scooter
+    deactivate ScooterApp

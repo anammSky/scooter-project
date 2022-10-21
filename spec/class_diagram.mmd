@@ -1,0 +1,35 @@
+classDiagram
+
+Scooter "*" --* "1" ScooterApp
+User "*" --* "1" ScooterApp: Register
+User "1" -- "1" Scooter
+
+class Scooter {
+    + station: string
+    + user: string
+    + serial: number
+    + charger: number
+    + isBroken: boolean
+    + docked: boolean
+
+    + rent(boolean)
+    + dock(string)
+    + recharge()
+}
+
+class User {
+    # username: string
+    # password: string
+    # age: number
+}
+
+class ScooterApp {
+    + stations: object
+    # registeredUsers: object $
+    # scooterSessions: array $
+
+    + register(string)
+    + logIn(string, string)
+    + addScooter(object, object)
+    + removeScooter(object)
+}
