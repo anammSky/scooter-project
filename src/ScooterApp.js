@@ -45,8 +45,17 @@ class ScooterApp {
   }
   logIn(username, password) {
     // Check to see that the user is in the registeredUsers object, and then check to see that their password or matches the password argument, if either of these matches are false, throw an error: “Username or password is incorrect.”
-    // If the previous checks pass, mark the correct user in the registeredUsers object loggedIn property to true.
-    // Log to the console that the user has logged in successfully.
+    if (
+      !this.registeredUsers[username] ||
+      this.registeredUsers[username][password] !== password
+    ) {
+      throw "Username or password is incorrect.";
+    } else {
+      // If the previous checks pass, mark the correct user in the registeredUsers object loggedIn property to true.
+      this.registeredUsers[username].loggedIn = true;
+      // Log to the console that the user has logged in successfully.
+      console.log("user has logged in successfully");
+    }
   }
   addScooter(location, scooter) {
     // NOTE: location is a string and scooter is a Scooter object
