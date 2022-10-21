@@ -1,17 +1,16 @@
-const Scooter = require('../src/Scooter')
-const User = require('../src/User')
+const Scooter = require("../src/Scooter");
+const User = require("../src/User");
 
 //typeof scooter === object
-describe('scooter object', () => {
-  test('does something', () => {
-    // edit this to be a real test!
-    expect(false).toEqual(true);
-  }
-)
-})
+// describe("scooter object", () => {
+//   test("does something", () => {
+//     // edit this to be a real test!
+//     expect(false).toEqual(true);
+//   });
+// });
 
 //Method tests
-describe('scooter methods', () => {
+describe("scooter methods", () => {
   // tests here!
 
   //rent method
@@ -21,5 +20,9 @@ describe('scooter methods', () => {
   //requestRepair method
 
   //charge method
-
-})
+  test("charge", async () => {
+    const newScooter = new Scooter();
+    await newScooter.recharge(); // we need to wait for the charge!
+    expect(newScooter.charge).toBe(100);
+  });
+});
