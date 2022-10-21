@@ -84,12 +84,42 @@ describe("ScooterApps add scooter method", () => {
     newApp.register(newUser);
   });
   test("should update the scooter location", () => {
-    addScooter("manhattan", newScooter);
+    newApp.addScooter("manhattan", newScooter);
     expect(newScooter.station).toMatch("manhattan");
   });
   test("should add scooter to stations list", () => {
-    addScooter("manhattan", newScooter);
+    newApp.addScooter("manhattan", newScooter);
     expect(newApp.stations["manhattan"]).toContain(newScooter);
   });
 });
 // remove scooter
+describe("ScooterApps remove scooter method", () => {
+  beforeEach(() => {
+    newUser = new User("Peter", "password", 19);
+    newScooter = new Scooter("bronx", newUser);
+    newApp = new ScooterApp();
+    newApp.register(newUser);
+  });
+  test("should update the scooter location", () => {
+    newApp.addScooter("manhattan", newScooter);
+    newApp.removeScooter(newScooter);
+    expect(newApp.stations["manhattan"]).not.toContain(newScooter);
+  });
+  test("should throw error if scooter is not found", () => {
+    otherScooter = new Scooter("brooklyn", newUser);
+    newApp.addScooter("manhattan", newScooter);
+
+    expect(() => {
+      newApp.removeScooter(otherScooter);
+    }).toThrow("this scooter cannot be found");
+  });
+
+  test("log scooter has been removed", () => {
+    newApp.addScooter("manhattan", newScooter);
+    let log = jest.spyOn(console, "log");
+    newApp.removeScooter(newScooter);
+    expect(log).toHaveBeenCalledWith(
+      "The scooter has successfully been removed"
+    );
+  });
+});

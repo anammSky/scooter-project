@@ -58,17 +58,35 @@ class ScooterApp {
     }
   }
   addScooter(location, scooter) {
-    // NOTE: location is a string and scooter is a Scooter object
     // Set the Scooter’s station property to the location argument
+    scooter.station = location;
     // Add the scooter argument to the stations
+    this.stations[location].push(scooter);
   }
-  RemoveScooter(scooterToRemove) {
-    // NOTE: scooterToRemove is a Scooter object
+  removeScooter(scooterToRemove) {
     // Identify the scooterToRemove’s value for serial number
     // BONUS: Use this serial number to remove the Scooter object from the correct location list
-    // NOTE: You’ll need to do some digging here into nested objects and/or lists
-    // Log to the console that the scooter has successfully been removed
-    // Throw an error if the scooter serial number is not located - this means that the scooterToRemove object has not previously been added.
+    let responseMessage = "this scooter cannot be found";
+    for (const location in this.stations) {
+      let filteredLocation = this.stations[location].filter((scooter) => {
+        if (scooter.serial !== scooterToRemove.serial) {
+          return true;
+        } else {
+          responseMessage = "The scooter has successfully been removed";
+          return false;
+        }
+      });
+      this.stations[location] = filteredLocation;
+
+      if (responseMessage === "this scooter cannot be found") {
+        // Throw an error if the scooter serial number is not located - this means that the scooterToRemove object has not previously been added.
+        throw responseMessage;
+      } else {
+        // Log to the console that the scooter has successfully been removed
+        // return responseMessage;
+        console.log(responseMessage);
+      }
+    }
   }
 }
 
