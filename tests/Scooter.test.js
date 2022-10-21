@@ -50,7 +50,10 @@ describe("scooter methods", () => {
   test("should rent scooter if not broken and charge is over 20", () => {
     newScooter.charge = 25;
     newScooter.isBroken = false;
-    expect(newScooter.rent()).toMatch("Enjoy the ride!");
+
+    let log = jest.spyOn(console, "log");
+    newScooter.rent();
+    expect(log).toHaveBeenCalledWith("Enjoy the ride!");
   });
   test("rent throws when charge 20 or under", () => {
     newScooter.charge = 15;
@@ -75,12 +78,10 @@ describe("scooter methods", () => {
     newScooter.dock("queens");
     expect(newScooter.docked).toBeTruthy();
   });
-
   test("station is updated", () => {
     newScooter.dock("queens");
     expect(newScooter.user).toMatch("");
   });
-
   test("throws if no station provided", () => {
     expect(() => {
       newScooter.dock();
