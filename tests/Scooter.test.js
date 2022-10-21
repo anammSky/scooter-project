@@ -1,6 +1,7 @@
 const Scooter = require("../src/Scooter");
 const User = require("../src/User");
 
+//Property tests
 describe("Scooter object is created correctly", () => {
   beforeEach(() => {
     newUser = new User("Mary", "qwerty", 53);
@@ -41,16 +42,60 @@ describe("Scooter object is created correctly", () => {
 
 //Method tests
 describe("scooter methods", () => {
-  // tests here!
-
+  beforeEach(() => {
+    newUser = new User("Mary", "qwerty", 53);
+    newScooter = new Scooter("bronx", newUser);
+  });
   //rent method
+  test("should rent scooter if not broken and charge is over 20", () => {
+    newScooter.charge = 25;
+    newScooter.isBroken = false;
+    expect(newScooter.rent()).toMatch("Enjoy the ride!");
+  });
+  test("rent throws when charge 20 or under", () => {
+    newScooter.charge = 15;
+    expect(() => {
+      newScooter.rent();
+    }).toThrow("Scooter low on battery, please charge.");
+  });
+  test("rent throws when broken", () => {
+    newScooter.charge = 30;
+    newScooter.isBroken = true;
+    expect(() => {
+      newScooter.rent();
+    }).toThrow("Scooter is broken, please send a repair request.");
+  });
 
   //dock method
+  test("station is updated", () => {
+    newScooter.dock("queens");
+    expect(newScooter.station).toMatch("queens");
+  });
+  test("station is updated", () => {
+    newScooter.dock("queens");
+    expect(newScooter.docked).toBeTruthy();
+  });
+
+  test("station is updated", () => {
+    newScooter.dock("queens");
+    expect(newScooter.user).toMatch("");
+  });
+
+  test("throws if no station provided", () => {
+    expect(() => {
+      newScooter.dock();
+    }).toThrow("Docking station required!");
+  });
 
   //requestRepair method
+  test("scooter charges to 100", async () => {
+    const newScooter = new Scooter();
+    await newScooter.requestRepair(); // we need to wait for the charge!
+    expect(newScooter.isBroken).toBeFalsy();
+  });
 
-  //charge method
-  test("charge", async () => {
+  //recharge method
+  test("scooter charges to 100", async () => {
     const newScooter = new Scooter();
     await newScooter.recharge(); // we need to wait for the charge!
     expect(newScooter.charge).toBe(100);
