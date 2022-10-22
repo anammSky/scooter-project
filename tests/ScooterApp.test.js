@@ -1,8 +1,21 @@
 const Scooter = require("../src/Scooter");
 const User = require("../src/User");
 const ScooterApp = require("../src/ScooterApp");
+const { scooterSessions } = require("../src/ScooterApp");
 
 // ScooterApp tests here
+describe("Scooter properties", () => {
+  beforeEach(() => {
+    newUser = new User("Peter", "password", 19);
+    newScooter = new Scooter("bronx", newUser);
+    newApp = new ScooterApp();
+  });
+
+  test("instance should not contain scooterSessions property", () => {
+    expect(newScooter).not.toHaveProperty(scooterSessions);
+  });
+});
+
 // register user
 describe("ScooterApps register method", () => {
   beforeEach(() => {

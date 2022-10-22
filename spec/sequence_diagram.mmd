@@ -2,7 +2,6 @@ sequenceDiagram
     actor User
     participant ScooterApp
     participant Scooter
-    participant Database
     
     User ->> ScooterApp: Create Account
     activate ScooterApp
@@ -26,17 +25,17 @@ sequenceDiagram
     end
     deactivate ScooterApp
 
-    User ->> ScooterApp: Rent Scooter
+    User ->> ScooterApp: request to rent Scooter
     activate ScooterApp
     alt find scooter
         activate Scooter
-        ScooterApp ->> Database: find scooter
-            activate Database
-            Database -->> Scooter: generate scooter
-            deactivate Database
+        ScooterApp ->> Scooter: find scooter
+        Scooter -->> Scooter: generate scooter
         ScooterApp ->> Scooter: update location
         alt no location
             Scooter -->> Scooter: error
+        end
+        alt location given
             ScooterApp ->> Scooter: update user
             Scooter -->> Scooter: check charge    
             Scooter -->> ScooterApp: return low charge
@@ -48,24 +47,14 @@ sequenceDiagram
     ScooterApp -->> User: rent scooter
     deactivate ScooterApp
 
-    User ->> ScooterApp: Return Scooter
-    activate ScooterApp
+
+    User ->> Scooter: Return Scooter
+    activate Scooter
     alt remove scooter
-            ScooterApp ->> Database: find scooter
-            activate Database
-            Database -->> Scooter: generate scooter
-            deactivate Database
-        activate Scooter
-        ScooterApp ->> Scooter: update location
-        alt no location
-            Scooter -->> Scooter: error
-            ScooterApp ->> Scooter: update user
-            Scooter -->> Scooter: check charge    
-            Scooter -->> ScooterApp: return low charge
-            Scooter -->> Scooter: broken
-            Scooter -->> ScooterApp: return broken status
-        end
+        Scooter -->> ScooterApp: find scooter in database
         deactivate Scooter
+        activate ScooterApp
+        ScooterApp -->> ScooterApp: remove scooter from database
     end
-    ScooterApp -->> User: rent scooter
+    ScooterApp -->> User: return scooter
     deactivate ScooterApp
